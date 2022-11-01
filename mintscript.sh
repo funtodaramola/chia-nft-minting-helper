@@ -58,7 +58,7 @@ localdir="./"
 chia_dir='~/chia-blockchain'
 
 # This variable represents the number that the script will start at. If you get an error and have to restart the script, you can change this to the number you stopped at, so that it won't try to mint the same nft twice
-i=01
+i=1
 
 # -------------- END USER-SUPPLIED  VARIABLES---------------------
 
