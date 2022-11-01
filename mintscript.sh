@@ -27,6 +27,9 @@ img_ext=".png"
 # Image filename prefix, e.g., in mynft1.jpg, the prefix is `mynft`
 img_pref="jig0"
 
+# Metadata filename prefix, e.g., in mynft1.json, the prefix is `mynft`
+metadata_pref="jig0"
+
 # nft.storage API Key
 api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEU1ZDA5ODY3NzI2QmQxOTBFNGRlYTkzMzc5YzNkMkRhYUIzN0VCMTgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2NzI4MDI2NzU0MCwibmFtZSI6IkhORzkgTkZUcyJ9.8iJhiTuwsovu_9FaCr5d-28XZrnaXbQZDZhC3_W66kA"
 
@@ -55,7 +58,7 @@ localdir="./"
 chia_dir='~/chia-blockchain'
 
 # This variable represents the number that the script will start at. If you get an error and have to restart the script, you can change this to the number you stopped at, so that it won't try to mint the same nft twice
-i=1
+i=01
 
 # -------------- END USER-SUPPLIED  VARIABLES---------------------
 
@@ -71,9 +74,9 @@ do
 	fi
 
 	# Check if metadata exists
-	metadata_path=${localdir}metadata/metadata${i}.json
+	metadata_path=${localdir}metadata/${metadata_pref}${i}.json
 	if [ ! -f "$metadata_path" ]; then
-		echo "User-specified metadata path ${localdir}metadata/metadata${i}.json does not exist! Check settings. Now exiting."
+		echo "User-specified metadata path ${localdir}metadata/${metadata_pref}${i}.json does not exist! Check settings. Now exiting."
 		exit
 	fi
 
@@ -106,7 +109,7 @@ do
 
 
 	# Upload metadata to nft.storage
-	echo "Uploading metadata${i}"
+	echo "Uploading ${metadata_pref}${i}"
 
 	response=`curl -X 'POST' "https://api.nft.storage/upload" \
 		-H "accept: application/json" \
@@ -119,7 +122,7 @@ do
 	echo "Metadata uploaded successfully. Metadata url = $metadata_url"
 	
 	# Check if hash of metadata locally and online match, then save hash as variable
-	local_metadata_hash=$(sha256sum ${localdir}metadata/metadata${i}.json | head -c 64)
+	local_metadata_hash=$(sha256sum ${localdir}metadata/${metadata_pref}${i}.json | head -c 64)
 	remote_metadata_hash=$(curl -s $metadata_url | sha256sum | head -c 64)
 	if [ $remote_metadata_hash == $local_metadata_hash ]
 	then
